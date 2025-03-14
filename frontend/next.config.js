@@ -5,7 +5,7 @@ const nextConfig = {
   // output: 'export',
   reactStrictMode: true,
   images: {
-    domains: ['localhost'],
+    domains: ['127.0.0.1', 'localhost'],
     remotePatterns: [
       {
         hostname: '**.cyber-scale.me',

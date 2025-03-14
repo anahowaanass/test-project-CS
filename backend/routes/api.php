@@ -1,8 +1,12 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\EventParticipantController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
+use Barryvdh\Debugbar\DataCollector\EventCollector;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,13 +20,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Events APIs
+// Route::get('/events', [EventController::class, 'index']);
+// Route::get('/events/{id}', [EventController::class, 'show']);
+// Route::post('/events', [EventController::class, 'store']);
+// Route::post('/events/{id}/join', [EventController::class, 'join']);
 
-Route::get('/ping', function () {
-    return response()->json(['message' => 'API is working!']);
-});
-
-
-
+// Route::post('/events/{id}/join', [EventParticipantController::class, 'joinEvent']);
+// Route::get('/events/{id}/participants', [EventParticipantController::class, 'getParticipants']);
+Route::get('/events/joined', [EventController::class, 'getJoinedEvents']);
+Route::get('/events/my', [EventController::class, 'myEvents']);
 
 
 
@@ -86,6 +93,64 @@ Route::middleware('auth:api')->group(
                 );
             }
         );
+
+
+        Route::prefix('events')->name('events.')->group(
+            function () {
+                Route::controller(EventController::class)->group(
+                    function () {
+                        Route::get('/', 'index');
+                        Route::get('/{id}', 'show');
+                        // Route::get('/my', 'myEvents');
+                        // Route::get('/joined', 'getJoinedEvents');
+                        Route::post('/', 'store');
+                        Route::delete('/{id}', 'destroy');
+
+
+
+                    }
+                );
+            }
+        );
+
+
+
+        Route::prefix('events')->name('events.')->group(
+            function () {
+                Route::controller(EventParticipantController::class)->group(
+                    function () {
+                        Route::post('/{id}/join', 'joinEvent');
+                        Route::get('/{id}/participants', 'getParticipants');
+
+
+
+                    }
+                );
+            }
+        );
+
+
+
+        Route::prefix('notifications')->name('notifications.')->group(
+            function () {
+                Route::controller(NotificationController::class)->group(
+                    function () {
+                        Route::get('/', 'index');
+                        Route::patch('/{id}/read', 'markAsRead');
+                        Route::delete('/{id}', 'delete');
+
+
+
+                    }
+                );
+            }
+        );
+
+
+
+
+
+
     }
 );
 
