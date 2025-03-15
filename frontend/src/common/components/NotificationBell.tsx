@@ -25,7 +25,7 @@ const NotificationBell = () => {
     }
 
     // Initialize Pusher (or Soketi)
-    const pusher = new Pusher('app-key', {
+    const pusher = new Pusher('app_key', {
       cluster: 'mt1',
       forceTLS: false,
       authEndpoint: `${process.env.NEXT_PUBLIC_API_URL}/broadcasting/auth`,
